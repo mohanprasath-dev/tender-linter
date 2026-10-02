@@ -1,0 +1,105 @@
+# Rule data for Tender Linter. Source: docs/PROJECT_SPEC.md section 6.
+# Rule set version: bump on every change. Reports print this version.
+# Wording rules: never say "outdated" or "withdrawn" unless R02 fires from a verified status.
+# Every message states the verified date and links the source.
+# message_hi stays null until a fluent speaker has reviewed the translation.
+rule_set_version: "0.1.0"
+rules:
+  - id: R01
+    name: Unknown citation
+    severity: CANNOT_VERIFY
+    fires_when: Cited IS number is not in standards
+    evidence: none
+    message_en: "This standard is not in our dataset, so we cannot check it."
+    message_hi: null
+  - id: R02
+    name: Superseded or withdrawn
+    severity: ERROR
+    fires_when: Row status is Withdrawn or Superseded and the row is verified
+    evidence: catalogue record link, verified date
+    message_en: "The catalogue shows this standard as {status} (verified {verified_on})."
+    message_hi: null
+  - id: R03
+    name: Year differs
+    severity: WARNING
+    fires_when: Cited year differs from the row's verified year
+    evidence: catalogue link
+    message_en: "The clause cites {cited_year}. The catalogue shows {catalogue_year} (verified {verified_on})."
+    message_hi: null
+  - id: R04
+    name: Part or section mismatch
+    severity: WARNING
+    fires_when: Cited part or section is absent or different from the verified row
+    evidence: catalogue link
+    message_en: "The cited part or section differs from the catalogue record (verified {verified_on})."
+    message_hi: null
+  - id: R05
+    name: Differs from certification list
+    severity: ERROR
+    fires_when: Product has a certification rule naming standard X and the clause cites Y
+    evidence: certification source link, instrument name
+    message_en: "The certification list specifies {specified} for this product. This clause cites {cited}. (verified {verified_on})"
+    message_hi: null
+  - id: R06
+    name: Certification not mentioned
+    severity: WARNING
+    fires_when: Product has a certification rule and the clause never mentions it
+    evidence: certification source link
+    message_en: "A certification requirement is listed for this product and the clause does not mention it (verified {verified_on})."
+    message_hi: null
+  - id: R07
+    name: No standard cited
+    severity: WARNING
+    fires_when: Product is mapped and the clause cites no standard
+    evidence: product-standard map link
+    message_en: "No standard is cited for this product. The dataset lists {standards} (verified {verified_on})."
+    message_hi: null
+  - id: R08
+    name: Allied standard absent
+    severity: INFO
+    fires_when: Verified allied_links exist from the cited standard and none are cited
+    evidence: link row source
+    message_en: "A verified link lists {allied} alongside the cited standard (verified {verified_on})."
+    message_hi: null
+  - id: R09
+    name: Vague wording
+    severity: INFO
+    fires_when: Phrase found in vague_terms
+    evidence: explanation
+    message_en: "This wording does not name a standard: {explanation}"
+    message_hi: null
+  - id: R10
+    name: Abstain
+    severity: CANNOT_VERIFY
+    fires_when: Product is unmapped or no rows exist
+    evidence: none
+    message_en: "No applicable standard in our dataset."
+    message_hi: null
+  - id: R11
+    name: Internal contradiction
+    severity: WARNING
+    fires_when: Same standard cited with two different years or parts in one document
+    evidence: both clause locations
+    message_en: "This standard is cited with different years or parts at {location_a} and {location_b}."
+    message_hi: null
+  - id: R12
+    name: Malformed citation
+    severity: INFO
+    fires_when: Citation pattern near-matches a known number
+    evidence: suggested candidate, needs officer confirmation
+    message_en: "This citation looks close to {candidate}. Please confirm."
+    message_hi: null
+  - id: R13
+    name: Wrong product family
+    severity: WARNING
+    fires_when: Cited standard is linked to a different product in the map
+    evidence: map source link
+    message_en: "The dataset links this standard to {other_product}, not this product (verified {verified_on})."
+    message_hi: null
+  - id: R14
+    name: Stale row
+    severity: INFO
+    fires_when: Any used row exceeds the freshness limit
+    evidence: verified date
+    message_en: "A source row used here was last verified on {verified_on}."
+    message_hi: null

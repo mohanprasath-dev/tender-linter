@@ -1,0 +1,47 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+env/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Database and local stores
+*.sqlite
+*.sqlite3
+*.db
+
+# Evidence screenshots may contain standard text. Review before any commit.
+evidence_store/
+object_store/
+uploads/
+# Private curator working notes (pasted official text). Never commit.
+private_notes/
+eval/reports/raw/
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
