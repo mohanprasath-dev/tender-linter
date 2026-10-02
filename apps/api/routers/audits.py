@@ -7,7 +7,17 @@ import uuid
 from datetime import UTC, datetime
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    Query,
+    Response,
+    UploadFile,
+    status,
+)
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -24,6 +34,7 @@ from apps.api.schemas.audits import (
 from packages.data.db import get_db
 from packages.data.models import AuditLog, AuditSession, User
 from packages.extraction import RegexExtractor, validate_extraction_spans
+from packages.ingestion import IngestionService
 from packages.mapping.product_mapper import ProductMapper
 from packages.rules.context import create_rule_context_from_db
 from packages.rules.engine import CERTIFICATION_TERMS_LOWER, RulesEngine
@@ -182,22 +193,28 @@ def create_audit(
             detail="Tender specification text cannot be empty",
         )
 
-    raw_lines = [line.strip() for line in source_text.split("\n") if line.strip()]
-    if not raw_lines:
-        raw_lines = [source_text]
+    ingest_svc = IngestionService()
+    parsed_doc = ingest_svc.ingest_text(source_text, filename=audit_in.document_name or "pasted.txt")
 
     clauses_data = []
     all_findings = []
 
-    for i, line in enumerate(raw_lines):
-        cid = f"c{i+1}"
+    for seg in parsed_doc.clauses:
         extractions, findings = _run_clause_audit(
-            clause_id=cid,
-            clause_text=line,
-            language_hint=audit_in.language_hint,
+            clause_id=seg.id,
+            clause_text=seg.text,
+            language_hint=audit_in.language_hint or seg.language,
             db=db,
         )
-        clauses_data.append({"id": cid, "text": line, "extractions": extractions})
+        clauses_data.append({
+            "id": seg.id,
+            "text": seg.text,
+            "extractions": extractions,
+            "page_number": seg.page_number,
+            "start_char": seg.start_char,
+            "end_char": seg.end_char,
+            "source_type": seg.source_type,
+        })
         all_findings.extend(findings)
 
     audit_session = AuditSession(
@@ -221,6 +238,92 @@ def create_audit(
         table_name="audit_sessions",
         record_id=0,
         new_values=json.dumps({"audit_id": audit_id, "clauses_count": len(clauses_data)}),
+    )
+    db.add(audit_log_entry)
+    db.commit()
+
+    return AuditResponse(
+        id=audit_session.id,
+        document_name=audit_session.document_name,
+        status=audit_session.status,
+        language_hint=audit_session.language_hint,
+        clauses=[ClauseResponse(**c) for c in clauses_data],
+        findings=[FindingResponse(**f) for f in all_findings],
+    )
+
+
+@router.post("/upload", response_model=AuditResponse)
+async def upload_audit(
+    file: UploadFile = File(...),
+    language_hint: str = Form(default="en"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> AuditResponse:
+    """Ingest a DOCX, PDF, or text tender document, segment clauses, and run audit."""
+    content = await file.read()
+    if not content:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Uploaded file is empty",
+        )
+
+    ingest_svc = IngestionService()
+    parsed_doc = ingest_svc.ingest_bytes(content, filename=file.filename or "uploaded_tender")
+
+    if parsed_doc.status != "SUCCESS":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=parsed_doc.error_message or "Failed to parse uploaded document",
+        )
+
+    audit_id = f"aud_{uuid.uuid4().hex[:10]}"
+    clauses_data = []
+    all_findings = []
+
+    for seg in parsed_doc.clauses:
+        extractions, findings = _run_clause_audit(
+            clause_id=seg.id,
+            clause_text=seg.text,
+            language_hint=language_hint or seg.language,
+            db=db,
+        )
+        clauses_data.append({
+            "id": seg.id,
+            "text": seg.text,
+            "extractions": extractions,
+            "page_number": seg.page_number,
+            "start_char": seg.start_char,
+            "end_char": seg.end_char,
+            "source_type": seg.source_type,
+        })
+        all_findings.extend(findings)
+
+    audit_session = AuditSession(
+        id=audit_id,
+        document_name=file.filename or "uploaded_tender",
+        source_text=parsed_doc.full_text,
+        language_hint=language_hint,
+        status="COMPLETED",
+        created_by=current_user.username,
+        created_at=datetime.now(UTC),
+        clauses_json=json.dumps(clauses_data),
+        findings_json=json.dumps(all_findings),
+    )
+    db.add(audit_session)
+
+    # Append to audit log
+    audit_log_entry = AuditLog(
+        timestamp=datetime.now(UTC),
+        user_id=current_user.id,
+        action="UPLOAD_AUDIT",
+        table_name="audit_sessions",
+        record_id=0,
+        new_values=json.dumps({
+            "audit_id": audit_id,
+            "filename": file.filename,
+            "source_type": parsed_doc.source_type,
+            "clauses_count": len(clauses_data),
+        }),
     )
     db.add(audit_log_entry)
     db.commit()

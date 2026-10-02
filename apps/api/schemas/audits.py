@@ -15,6 +15,10 @@ class ClauseResponse(BaseModel):
     id: str
     text: str
     extractions: dict[str, Any]
+    page_number: int | None = None
+    start_char: int | None = None
+    end_char: int | None = None
+    source_type: str | None = None
 
 
 class FindingResponse(BaseModel):
