@@ -528,3 +528,139 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
     ctx.add_vague_terms([vt1, vt2])
 
     return ctx
+
+
+def create_rule_context_from_db(db_session: Any, stale_days: int = 180) -> InMemoryRuleDataContext:
+    """Build an InMemoryRuleDataContext by querying verified database rows."""
+    import json
+
+    from sqlalchemy import select
+
+    from packages.data.models import (
+        AlliedLink,
+        CertificationRule,
+        Product,
+        ProductStandardMap,
+        Standard,
+        VagueTerm,
+    )
+
+    ctx = InMemoryRuleDataContext(stale_days=stale_days)
+
+    # 1. Standards
+    db_standards = db_session.execute(select(Standard)).scalars().all()
+    standards_records = []
+    for s in db_standards:
+        standards_records.append(
+            StandardRecord(
+                id=s.id,
+                is_number=s.is_number,
+                part=s.part,
+                section=s.section,
+                title=s.title,
+                publication_year=s.publication_year,
+                status=s.status,
+                superseded_by_id=s.superseded_by_id,
+                amendments=s.amendments,
+                catalogue_url=s.catalogue_url,
+                verified_on=s.verified_on,
+                verified_by=s.verified_by,
+            )
+        )
+    ctx.add_standards(standards_records)
+
+    # 2. Products
+    db_products = db_session.execute(select(Product)).scalars().all()
+    product_records = []
+    for p in db_products:
+        syn_en = json.loads(p.synonyms_en) if isinstance(p.synonyms_en, str) else p.synonyms_en
+        syn_hi = json.loads(p.synonyms_hi) if isinstance(p.synonyms_hi, str) else p.synonyms_hi
+        product_records.append(
+            ProductRecord(
+                id=p.id,
+                canonical_name=p.canonical_name,
+                family=p.family,
+                synonyms_en=syn_en or [],
+                synonyms_hi=syn_hi or [],
+            )
+        )
+    ctx.add_products(product_records)
+
+    # 3. Product Standard Maps
+    db_maps = db_session.execute(select(ProductStandardMap)).scalars().all()
+    map_records = []
+    for m in db_maps:
+        map_records.append(
+            ProductStandardMapRecord(
+                id=m.id,
+                product_id=m.product_id,
+                standard_id=m.standard_id,
+                relation=m.relation,
+                source_url=m.source_url,
+                verified_on=m.verified_on,
+                verified_by=m.verified_by,
+            )
+        )
+    ctx.add_product_standard_maps(map_records)
+
+    # 4. Certification Rules
+    db_certs = db_session.execute(select(CertificationRule)).scalars().all()
+    cert_records = []
+    for c in db_certs:
+        cert_records.append(
+            CertificationRuleRecord(
+                id=c.id,
+                product_id=c.product_id,
+                scheme=c.scheme,
+                specified_standard_id=c.specified_standard_id,
+                instrument=c.instrument,
+                source_url=c.source_url,
+                verified_on=c.verified_on,
+                verified_by=c.verified_by,
+            )
+        )
+    ctx.add_certification_rules(cert_records)
+
+    # 5. Allied Links
+    db_allied = db_session.execute(select(AlliedLink)).scalars().all()
+    allied_records = []
+    for a in db_allied:
+        allied_records.append(
+            AlliedLinkRecord(
+                id=a.id,
+                source_standard_id=a.from_standard_id,
+                allied_standard_id=a.to_standard_id,
+                relation=a.relation,
+                source_url=a.source_url,
+                verified_on=a.verified_on,
+                verified_by=a.verified_by,
+            )
+        )
+    ctx.add_allied_links(allied_records)
+
+    # 6. Vague Terms
+    db_vague = db_session.execute(select(VagueTerm)).scalars().all()
+    if db_vague:
+        vague_records = [
+            VagueTermRecord(id=v.id, term=v.phrase, language=v.language, explanation=v.explanation)
+            for v in db_vague
+        ]
+        ctx.add_vague_terms(vague_records)
+    else:
+        ctx.add_vague_terms([
+            VagueTermRecord(
+                id=1,
+                term="ISI quality",
+                language="en",
+                explanation="Refers to quality generally without specifying an Indian Standard number.",
+            ),
+            VagueTermRecord(
+                id=2,
+                term="as per BIS",
+                language="en",
+                explanation="Names the bureau without citing an applicable standard number.",
+            ),
+        ])
+
+    return ctx
+

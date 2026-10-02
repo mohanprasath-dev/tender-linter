@@ -81,9 +81,21 @@ class ProductMapper:
                     )
                     exact_syn_match = True
                     break
-                # Substring match on synonym
-                if syn_norm and (syn_norm in norm_query or norm_query in syn_norm):
-                    # Check token containment
+                # Word boundary match on synonym
+                if syn_norm and len(syn_norm) >= 3:
+                    pattern = r"(?:^|\W)" + re.escape(syn_norm) + r"(?:$|\W)"
+                    if re.search(pattern, norm_query):
+                        candidates.append(
+                            CandidateProductMatch(
+                                product_id=prod.id,
+                                canonical_name=prod.canonical_name,
+                                score=0.92,
+                                method=MappingMatchMethod.SYNONYM,
+                            )
+                        )
+                        exact_syn_match = True
+                        break
+                elif syn_norm and norm_query in syn_norm:
                     if _token_jaccard(norm_query, syn_norm) >= 0.5:
                         candidates.append(
                             CandidateProductMatch(
