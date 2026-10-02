@@ -63,9 +63,15 @@ def test_suggest_near():
 # ---- provenance ----
 def good_row():
     return {
-        "is_number": "IS 1", "title": "t", "catalogue_url": "https://x.example/a",
-        "verified_on": "2026-10-02", "verified_by": "A", "second_checked_by": "B",
-        "evidence_ref": "e1", "status": "Active", "publication_year": "2010",
+        "is_number": "IS 1",
+        "title": "t",
+        "catalogue_url": "https://x.example/a",
+        "verified_on": "2026-10-02",
+        "verified_by": "A",
+        "second_checked_by": "B",
+        "evidence_ref": "e1",
+        "status": "Active",
+        "publication_year": "2010",
     }
 
 
@@ -111,9 +117,20 @@ def test_spans_drop_and_count_invented():
     ext = {
         "products": [{"text": "Laptops", "span": [0, 7]}],
         "citations": [
-            {"raw": "IS 13252 (Part 1): 2010", "span": [s, e], "is_number": "IS 13252", "part": "1", "year": 2010},
+            {
+                "raw": "IS 13252 (Part 1): 2010",
+                "span": [s, e],
+                "is_number": "IS 13252",
+                "part": "1",
+                "year": 2010,
+            },
             {"raw": "IS 99999: 2015", "span": [0, 5], "is_number": "IS 99999", "year": 2015},
-            {"raw": "IS 13252 (Part 1): 2010", "span": [s, e], "is_number": "IS 13252", "year": 2011},
+            {
+                "raw": "IS 13252 (Part 1): 2010",
+                "span": [s, e],
+                "is_number": "IS 13252",
+                "year": 2011,
+            },
         ],
     }
     out, dropped, invented = spans.validate(clause, ext)
@@ -124,9 +141,16 @@ def test_spans_drop_and_count_invented():
 # ---- eval report ----
 def test_eval_report_counts_and_requires_description():
     data = {
-        "set_name": "synthetic-v1", "description": "synthetic, team-written",
+        "set_name": "synthetic-v1",
+        "description": "synthetic, team-written",
         "results": [
-            {"id": "T01", "language": "en", "kind": "defect", "expected": ["R05", "R06"], "got": ["R05"]},
+            {
+                "id": "T01",
+                "language": "en",
+                "kind": "defect",
+                "expected": ["R05", "R06"],
+                "got": ["R05"],
+            },
             {"id": "T13", "language": "en", "kind": "clean", "expected": [], "got": []},
             {"id": "T07", "language": "en", "kind": "abstain", "expected": ["R10"], "got": ["R10"]},
         ],
@@ -162,10 +186,18 @@ def test_corpus_matrix_and_normaliser_agree():
     t12 = next(r for r in rows if r["id"] == "T12")
     assert norm.find_citations(t12["clause"])[0]["is_number"] == "IS 13252"
     t10 = next(r for r in rows if r["id"] == "T10")
-    assert norm.suggest_near(norm.find_citations(t10["clause"])[0]["is_number"], ["IS 13252"]) == ["IS 13252"]
+    assert norm.suggest_near(norm.find_citations(t10["clause"])[0]["is_number"], ["IS 13252"]) == [
+        "IS 13252"
+    ]
 
 
 def test_no_em_dashes_in_repo_text():
     for p in ROOT.rglob("*"):
-        if p.suffix in {".md", ".yaml", ".yml", ".csv", ".py"} and ".git" not in p.parts and p.name != "test_skill_scripts.py":
+        if (
+            p.suffix in {".md", ".yaml", ".yml", ".csv", ".py"}
+            and ".git" not in p.parts
+            and "node_modules" not in p.parts
+            and ".venv" not in p.parts
+            and p.name != "test_skill_scripts.py"
+        ):
             assert "\u2014" not in p.read_text(encoding="utf-8"), p

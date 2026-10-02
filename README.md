@@ -35,11 +35,14 @@ infra/               docker-compose, deployment files
 GEMINI.md            always-on rules for the coding agent
 ```
 
-## Quick start (target, after M0)
-```
+## Quick start
+```bash
 cp .env.example .env
 docker compose -f infra/docker-compose.yml up
 ```
+- Web health dashboard: [http://localhost:3000](http://localhost:3000) (or [http://localhost:5173](http://localhost:5173))
+- API health endpoint: [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health)
+- API version endpoint: [http://localhost:8000/api/v1/version](http://localhost:8000/api/v1/version)
 
 ## Run the skill script tests now
 ```

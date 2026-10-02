@@ -26,5 +26,36 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # M0 adds: api tests, web lint and type check, docker build.
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r apps/api/requirements.txt
+      - run: pytest -q tests
+
+  web-lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - working-directory: apps/web
+        run: |
+          npm ci
+          npm run lint
+          npm run build
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API Docker image
+        run: docker build -f apps/api/Dockerfile -t tender-linter-api:test .
+      - name: Build Web Docker image
+        run: docker build -f apps/web/Dockerfile -t tender-linter-web:test .
+
   # M8 adds: full evaluation run with regression gate.

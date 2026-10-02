@@ -1,0 +1,1 @@
+"""Tender Linter API package."""
