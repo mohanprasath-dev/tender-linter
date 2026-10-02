@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from apps.api.core.config import settings
-from apps.api.routers import health, version
+from apps.api.routers import admin, audits, auth, health, products, standards, version
 from packages.data.db import init_db
 
 
@@ -36,9 +36,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount API v1 router
+# Mount API v1 routers
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
 app.include_router(version.router, prefix="/api/v1", tags=["version"])
+app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
+app.include_router(standards.router, prefix="/api/v1", tags=["standards"])
+app.include_router(products.router, prefix="/api/v1", tags=["products"])
+app.include_router(audits.router, prefix="/api/v1", tags=["audits"])
+app.include_router(admin.router, prefix="/api/v1", tags=["admin"])
 
 # Mount root aliases for convenience and health probes
 app.include_router(health.router, tags=["probes"])
