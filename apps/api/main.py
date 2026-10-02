@@ -1,13 +1,30 @@
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from apps.api.core.config import settings
 from apps.api.routers import health, version
+from packages.data.db import init_db
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """Application lifespan context for startup and shutdown events."""
+    try:
+        init_db()
+    except Exception:
+        # Allow running in testing or environments where DB might connect later
+        pass
+    yield
+
 
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="Evidence-linked auditor for Indian Standards citations in tender specifications",
+    lifespan=lifespan,
 )
 
 # Configure CORS
