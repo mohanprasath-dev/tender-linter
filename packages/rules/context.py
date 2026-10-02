@@ -458,14 +458,14 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         canonical_name="Laptop / notebook / tablet",
         family="IT equipment",
         synonyms_en=["laptop", "laptops", "notebook", "tablet", "tablets"],
-        synonyms_hi=["लैपटॉप"],
+        synonyms_hi=["लैपटॉप", "नोटबुक", "टैबलेट", "टैबलेट्स"],
     )
     p2 = ProductRecord(
         id=2,
         canonical_name="Power adaptors for IT equipment",
         family="IT equipment",
         synonyms_en=["power adaptor", "power adaptors", "adaptor"],
-        synonyms_hi=[],
+        synonyms_hi=["पावर एडाप्टर", "एडाप्टर", "चार्जिंग एडाप्टर"],
     )
     p3 = ProductRecord(
         id=3,
@@ -479,7 +479,7 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         canonical_name="IT equipment (general)",
         family="IT equipment",
         synonyms_en=["it equipment"],
-        synonyms_hi=[],
+        synonyms_hi=["आईटी उपकरण", "आईटी उपस्कर", "सूचना प्रौद्योगिकी उपकरण"],
     )
     ctx.add_products([p1, p2, p3, p4])
 
@@ -570,7 +570,31 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         language="en",
         explanation="Names the bureau without citing an applicable standard number.",
     )
-    ctx.add_vague_terms([vt1, vt2])
+    vt3 = VagueTermRecord(
+        id=3,
+        term="आईएसआई गुणवत्ता",
+        language="hi",
+        explanation="बिना मानक संख्या बताए सामान्य गुणवत्ता का उल्लेख करता है।",
+    )
+    vt4 = VagueTermRecord(
+        id=4,
+        term="बीआईएस मानक",
+        language="hi",
+        explanation="बिना मानक संख्या बताए केवल ब्यूरो का नाम लिखता है।",
+    )
+    vt5 = VagueTermRecord(
+        id=5,
+        term="सरकारी मानक",
+        language="hi",
+        explanation="बिना मानक संख्या बताए सरकारी मानक का अस्पष्ट संदर्भ देता है।",
+    )
+    vt6 = VagueTermRecord(
+        id=6,
+        term="उत्कृष्ट गुणवत्ता",
+        language="hi",
+        explanation="बिना किसी भारतीय मानक संख्या के सामान्य विपणन दावा।",
+    )
+    ctx.add_vague_terms([vt1, vt2, vt3, vt4, vt5, vt6])
 
     return ctx
 
@@ -704,6 +728,30 @@ def create_rule_context_from_db(db_session: Any, stale_days: int = 180) -> InMem
                 term="as per BIS",
                 language="en",
                 explanation="Names the bureau without citing an applicable standard number.",
+            ),
+            VagueTermRecord(
+                id=3,
+                term="आईएसआई गुणवत्ता",
+                language="hi",
+                explanation="बिना मानक संख्या बताए सामान्य गुणवत्ता का उल्लेख करता है।",
+            ),
+            VagueTermRecord(
+                id=4,
+                term="बीआईएस मानक",
+                language="hi",
+                explanation="बिना मानक संख्या बताए केवल ब्यूरो का नाम लिखता है।",
+            ),
+            VagueTermRecord(
+                id=5,
+                term="सरकारी मानक",
+                language="hi",
+                explanation="बिना मानक संख्या बताए सरकारी मानक का अस्पष्ट संदर्भ देता है।",
+            ),
+            VagueTermRecord(
+                id=6,
+                term="उत्कृष्ट गुणवत्ता",
+                language="hi",
+                explanation="बिना किसी भारतीय मानक संख्या के सामान्य विपणन दावा।",
             ),
         ])
 

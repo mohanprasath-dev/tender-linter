@@ -2,10 +2,26 @@ from __future__ import annotations
 
 import re
 
+_DEV_MAP = str.maketrans("०१२३४५६७८९", "0123456789")
+
+
+def normalise_devanagari_digits(text: str) -> str:
+    """Convert Devanagari numerals ०-९ to ASCII digits 0-9."""
+    return text.translate(_DEV_MAP)
+
+
+def normalise_devanagari_citation(raw_citation: str) -> str:
+    """Normalize Devanagari digits, transliterated prefix, and 'भाग' to standard citation form."""
+    res = normalise_devanagari_digits(raw_citation)
+    res = re.sub(r"(?i:आई\.?\s?एस\.?|आईएस)", "IS", res)
+    res = re.sub(r"भाग\s*(\d+)", r"Part \1", res)
+    return res.strip()
+
 
 def base_is_number(is_str: str) -> str:
     """Extract the base IS number without (Part ...) or Part suffixes."""
-    cleaned = re.sub(r"\s*\(?\s*(?:(?i:Part)|भाग)\s*\d+\s*\)?", "", is_str).strip()
+    norm = normalise_devanagari_citation(is_str)
+    cleaned = re.sub(r"\s*\(?\s*(?:(?i:Part)|भाग)\s*\d+\s*\)?", "", norm).strip()
     return cleaned
 
 

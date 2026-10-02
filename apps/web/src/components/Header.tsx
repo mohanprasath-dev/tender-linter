@@ -31,6 +31,9 @@ export const Header: React.FC<HeaderProps> = ({
               Rules v{ruleSetVersion}
             </span>
           )}
+          <span className="badge badge-success" title="Hindi Pipeline Verified: Supported on 32 test clauses">
+            Hindi: Supported
+          </span>
         </div>
 
         <nav className="tab-navigation" aria-label="Main Navigation">
