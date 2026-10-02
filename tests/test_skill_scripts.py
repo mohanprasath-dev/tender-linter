@@ -182,7 +182,8 @@ def test_rules_yaml_complete():
 
 def test_corpus_matrix_and_normaliser_agree():
     rows = list(csv.DictReader((ROOT / "eval/corpus/synthetic-v1.csv").open(encoding="utf-8")))
-    assert [r["id"] for r in rows] == [f"T{i:02d}" for i in range(1, 14)]
+    assert [r["id"] for r in rows[:13]] == [f"T{i:02d}" for i in range(1, 14)]
+    assert len(rows) >= 60
     t12 = next(r for r in rows if r["id"] == "T12")
     assert norm.find_citations(t12["clause"])[0]["is_number"] == "IS 13252"
     t10 = next(r for r in rows if r["id"] == "T10")

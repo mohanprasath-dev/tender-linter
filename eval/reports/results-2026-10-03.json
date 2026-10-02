@@ -1,0 +1,970 @@
+{
+  "set_name": "synthetic-v1",
+  "description": "Expanded synthetic test corpus v1 with 65 clauses across English, Hindi, and mixed language.",
+  "rule_set_version": "0.1.0",
+  "total_clauses": 65,
+  "results": [
+    {
+      "id": "T01",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops. The laptops shall conform to IS 13252 (Part 1): 2010.",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.24
+    },
+    {
+      "id": "T02",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops. The laptops shall conform to IS/IEC 62368 Part 1: 2023.",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.09
+    },
+    {
+      "id": "T03",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS/IEC 62368 Part 1: 2019. Registration under the Compulsory Registration Scheme is required.",
+      "expected": [
+        "R03"
+      ],
+      "got": [
+        "R03"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    },
+    {
+      "id": "T04",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 10 microwave ovens conforming to IS 302-2-25.",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    },
+    {
+      "id": "T05",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 10 microwave ovens. Registration under the Compulsory Registration Scheme is required.",
+      "expected": [
+        "R07"
+      ],
+      "got": [
+        "R07"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T06",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver IT equipment of ISI quality.",
+      "expected": [
+        "R07",
+        "R09"
+      ],
+      "got": [
+        "R07",
+        "R09"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T07",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "The supplier shall deliver 20 portable air purifiers rated for 30 square metres.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T08",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver IT equipment conforming to IS 99999: 2015.",
+      "expected": [
+        "R01"
+      ],
+      "got": [
+        "R01"
+      ],
+      "passed": true,
+      "latency_ms": 0.07
+    },
+    {
+      "id": "T09",
+      "language": "en",
+      "kind": "defect",
+      "clause": "Clause 4.1: IT equipment shall conform to IS 13252 (Part 1): 2010. Clause 9.2: testing shall follow IS 13252 (Part 1): 2008.",
+      "expected": [
+        "R03",
+        "R11"
+      ],
+      "got": [
+        "R03",
+        "R11"
+      ],
+      "passed": true,
+      "latency_ms": 0.09
+    },
+    {
+      "id": "T10",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver IT equipment conforming to IS 13253 (Part 1): 2010.",
+      "expected": [
+        "R12"
+      ],
+      "got": [
+        "R12"
+      ],
+      "passed": true,
+      "latency_ms": 0.08
+    },
+    {
+      "id": "T11",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 10 microwave ovens conforming to IS 13252 (Part 1): 2010. Registration under the Compulsory Registration Scheme is required.",
+      "expected": [
+        "R05",
+        "R13"
+      ],
+      "got": [
+        "R05",
+        "R13"
+      ],
+      "passed": true,
+      "latency_ms": 0.08
+    },
+    {
+      "id": "T12",
+      "language": "hi",
+      "kind": "defect",
+      "clause": "आपूर्तिकर्ता 50 लैपटॉप की आपूर्ति करेगा। लैपटॉप IS 13252 (भाग 1): 2010 के अनुरूप होंगे। अनिवार्य पंजीकरण योजना (CRS) के अंतर्गत पंजीकरण आवश्यक है।",
+      "expected": [
+        "R05"
+      ],
+      "got": [
+        "R05"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    },
+    {
+      "id": "T13",
+      "language": "en",
+      "kind": "clean",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS/IEC 62368 Part 1: 2023. Registration under the Compulsory Registration Scheme is required.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T14",
+      "language": "en",
+      "kind": "clean",
+      "clause": "The supplier shall supply 20 laptops conforming to IS/IEC 62368 Part 1: 2023 with Compulsory Registration Scheme registration.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T15",
+      "language": "en",
+      "kind": "clean",
+      "clause": "Clause 1.2: 50 laptop notebooks conforming to IS/IEC 62368 Part 1: 2023 under CRS.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T16",
+      "language": "en",
+      "kind": "clean",
+      "clause": "Procurement of 100 power adaptors for IT equipment conforming to IS/IEC 62368 Part 1: 2023 with CRS certification.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T17",
+      "language": "en",
+      "kind": "clean",
+      "clause": "The bidder must provide 15 microwave ovens conforming to IS 302-2-25 with compulsory registration scheme certification.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T18",
+      "language": "en",
+      "kind": "clean",
+      "clause": "Delivery of 30 laptop units conforming to IS/IEC 62368 Part 1: 2023, registered under Compulsory Registration Scheme.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T19",
+      "language": "hi",
+      "kind": "clean",
+      "clause": "आपूर्तिकर्ता 25 लैपटॉप की आपूर्ति करेगा जो IS/IEC 62368 Part 1: 2023 के अनुरूप होंगे और अनिवार्य पंजीकरण योजना (CRS) के तहत पंजीकृत होंगे।",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T20",
+      "language": "hi",
+      "kind": "clean",
+      "clause": "कार्यालय के लिए 10 माइक्रोवेव ओवन की खरीद, जो IS 302-2-25 के अनुरूप होंगे और अनिवार्य पंजीकरण योजना (CRS) के अंतर्गत पंजीकृत हैं।",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T21",
+      "language": "hi",
+      "kind": "clean",
+      "clause": "आईटी उपकरणों के लिए 50 पावर एडाप्टर की आपूर्ति IS/IEC 62368 Part 1: 2023 के अनुसार CRS प्रमाणन के साथ होगी।",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T22",
+      "language": "mixed",
+      "kind": "clean",
+      "clause": "The vendor shall supply 40 laptops (लैपटॉप) conforming to IS/IEC 62368 Part 1: 2023 with Compulsory Registration Scheme (CRS) certification.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T23",
+      "language": "mixed",
+      "kind": "clean",
+      "clause": "Office requirement for 5 microwave ovens (माइक्रोवेव) conforming to IS 302-2-25 with CRS certification.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T24",
+      "language": "en",
+      "kind": "clean",
+      "clause": "Supply of 15 laptops meeting IS/IEC 62368 Part 1: 2023 under Compulsory Registration Scheme.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T25",
+      "language": "en",
+      "kind": "clean",
+      "clause": "Delivery of 10 tablets conforming to IS/IEC 62368 Part 1: 2023 with CRS registration.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T26",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver IT equipment conforming to IS 13253 (Part 1): 2010.",
+      "expected": [
+        "R12"
+      ],
+      "got": [
+        "R12"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T27",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver 50 laptops. The laptops shall conform to IS - 13252 (Part 1): 2010.",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T28",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver 50 laptops. The laptops shall conform to IS: 13252 (Part 1): 2010.",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    },
+    {
+      "id": "T29",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver 30 laptops meeting Indian standard for safety of information technology equipment without failure.",
+      "expected": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "got": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T30",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver IT equipment conforming to I S 1 3 2 5 2 (Part 1): 2010.",
+      "expected": [
+        "R12"
+      ],
+      "got": [
+        "R12"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T31",
+      "language": "hi",
+      "kind": "adversarial",
+      "clause": "आपूर्तिकर्ता 50 लैपटॉप की आपूर्ति करेगा जो IS १३२५२ (भाग १): २०१० के अनुरूप होंगे।",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T32",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall supply laptops of high ISI quality meeting general BIS requirements.",
+      "expected": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "got": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T33",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver 50 laptops conforming to is 13252 (part 1): 2010.",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T34",
+      "language": "hi",
+      "kind": "adversarial",
+      "clause": "लैपटॉप सरकारी बीआईएस मानक गुणवत्ता के होने चाहिए।",
+      "expected": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "got": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "passed": true,
+      "latency_ms": 0.26
+    },
+    {
+      "id": "T35",
+      "language": "mixed",
+      "kind": "adversarial",
+      "clause": "आपूर्तिकर्ता deliver करेगा 20 laptops // IS-13252 (Part 1) // year 2010.",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.08
+    },
+    {
+      "id": "T36",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver 10 microwave ovens conforming to IS 302-2-24.",
+      "expected": [
+        "R06",
+        "R12"
+      ],
+      "got": [
+        "R06",
+        "R12"
+      ],
+      "passed": true,
+      "latency_ms": 0.09
+    },
+    {
+      "id": "T37",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS    13252   (Part   1) :  2010.",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    },
+    {
+      "id": "T38",
+      "language": "mixed",
+      "kind": "adversarial",
+      "clause": "50 लैपटॉप IS 13252 (Part 1): 2010 के अनुरूप होंगे।",
+      "expected": [
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    },
+    {
+      "id": "T39",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Supply of 15 solar panels rated at 400W.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T40",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "The contractor shall deliver 5 diesel generators of 25 kVA capacity.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T41",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Procurement of 50 ergonomic executive mesh chairs.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T42",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Installation of 100 acoustic wall panels for conference hall.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T43",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Delivery of 20 commercial water purifiers.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T44",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Supply of 2 electric vehicle charging stations.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T45",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Procurement of 100 pairs of industrial safety shoes.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T46",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Delivery of 10 optical biometric fingerprint scanners.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T47",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Installation of automated firefighting sprinkler system.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T48",
+      "language": "en",
+      "kind": "abstain",
+      "clause": "Supply of 8 classroom LED multimedia projectors.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.02
+    },
+    {
+      "id": "T49",
+      "language": "hi",
+      "kind": "abstain",
+      "clause": "कार्यालय के लिए 10 वाटर कूलर और 5 वाटर प्यूरीफायर की आपूर्ति की जाएगी।",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T50",
+      "language": "mixed",
+      "kind": "abstain",
+      "clause": "The vendor shall supply 30 wooden office tables (कार्यालय मेज) for staff.",
+      "expected": [
+        "R10"
+      ],
+      "got": [
+        "R10"
+      ],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T51",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver equipment conforming to IS 999: 1995.",
+      "expected": [
+        "R02"
+      ],
+      "got": [
+        "R02"
+      ],
+      "passed": true,
+      "latency_ms": 0.07
+    },
+    {
+      "id": "T52",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS/IEC 62368 Part 1: 2018 with CRS registration.",
+      "expected": [
+        "R03"
+      ],
+      "got": [
+        "R03"
+      ],
+      "passed": true,
+      "latency_ms": 0.07
+    },
+    {
+      "id": "T53",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS 13252: 2010.",
+      "expected": [
+        "R04",
+        "R05",
+        "R06"
+      ],
+      "got": [
+        "R04",
+        "R05",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.08
+    },
+    {
+      "id": "T54",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The contractor shall supply industrial equipment conforming to IS 555 Part 1: 2015.",
+      "expected": [
+        "R08"
+      ],
+      "got": [
+        "R08"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T55",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS 302-2-25. Registration under CRS is required.",
+      "expected": [
+        "R05",
+        "R13"
+      ],
+      "got": [
+        "R05",
+        "R13"
+      ],
+      "passed": true,
+      "latency_ms": 0.07
+    },
+    {
+      "id": "T56",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 10 microwave ovens conforming to IS 13252 (Part 1): 2010. Registration under CRS is required.",
+      "expected": [
+        "R05",
+        "R13"
+      ],
+      "got": [
+        "R05",
+        "R13"
+      ],
+      "passed": true,
+      "latency_ms": 0.09
+    },
+    {
+      "id": "T57",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS 88888: 2021.",
+      "expected": [
+        "R01",
+        "R06"
+      ],
+      "got": [
+        "R01",
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.12
+    },
+    {
+      "id": "T58",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 50 laptops conforming to IS/IEC 62368 Part 1: 2023.",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.07
+    },
+    {
+      "id": "T59",
+      "language": "hi",
+      "kind": "defect",
+      "clause": "आपूर्तिकर्ता 20 लैपटॉप IS/IEC 62368 Part 1: 2018 के अनुसार CRS प्रमाणन के साथ देगा।",
+      "expected": [
+        "R03"
+      ],
+      "got": [
+        "R03"
+      ],
+      "passed": true,
+      "latency_ms": 0.08
+    },
+    {
+      "id": "T60",
+      "language": "hi",
+      "kind": "defect",
+      "clause": "आपूर्तिकर्ता 20 लैपटॉप IS/IEC 62368 Part 1: 2023 के अनुरूप देगा।",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.08
+    },
+    {
+      "id": "T61",
+      "language": "hi",
+      "kind": "defect",
+      "clause": "10 माइक्रोवेव ओवन IS 302-2-25 के अनुरूप दिए जाएंगे।",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T62",
+      "language": "hi",
+      "kind": "defect",
+      "clause": "सभी लैपटॉप बीआईएस गुणवत्ता और आईएसआई मार्क के अनुरूप होने चाहिए।",
+      "expected": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "got": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "passed": true,
+      "latency_ms": 0.1
+    },
+    {
+      "id": "T63",
+      "language": "mixed",
+      "kind": "defect",
+      "clause": "Clause 2: Laptops conform to IS 13252 (Part 1): 2010. Clause 8: Laptops conform to IS 13252 (Part 1): 2008.",
+      "expected": [
+        "R03",
+        "R05",
+        "R11"
+      ],
+      "got": [
+        "R03",
+        "R05",
+        "R11"
+      ],
+      "passed": true,
+      "latency_ms": 0.17
+    },
+    {
+      "id": "T64",
+      "language": "mixed",
+      "kind": "defect",
+      "clause": "The supplier shall deliver equipment conforming to IS 999: 1995 (निरस्त मानक)।",
+      "expected": [
+        "R02"
+      ],
+      "got": [
+        "R02"
+      ],
+      "passed": true,
+      "latency_ms": 0.07
+    },
+    {
+      "id": "T65",
+      "language": "mixed",
+      "kind": "defect",
+      "clause": "Vendor will provide 50 laptops (लैपटॉप) with standard warranty.",
+      "expected": [
+        "R06",
+        "R07"
+      ],
+      "got": [
+        "R06",
+        "R07"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    }
+  ],
+  "metrics": {
+    "rule_recall": {
+      "total_expected": 40,
+      "caught": 40,
+      "missed": 0,
+      "missed_details": []
+    },
+    "false_alarms": {
+      "clean_total": 13,
+      "count": 0,
+      "details": []
+    },
+    "abstain_correctness": {
+      "total": 13,
+      "correct": 13,
+      "details": []
+    },
+    "adversarial_robustness": {
+      "total": 13,
+      "passed": 13,
+      "details": []
+    },
+    "languages": {
+      "en": {
+        "passed": 46,
+        "total": 46
+      },
+      "hi": {
+        "passed": 11,
+        "total": 11
+      },
+      "mixed": {
+        "passed": 8,
+        "total": 8
+      }
+    },
+    "evidence_completeness": {
+      "total_applicable": 54,
+      "complete": 54,
+      "missing": 0
+    },
+    "latency": {
+      "p50_ms": 0.05,
+      "p95_ms": 0.12,
+      "avg_ms": 0.06,
+      "total_ms": 3.8
+    }
+  }
+}

@@ -417,7 +417,40 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         verified_on=datetime.date(2026, 10, 2),
         verified_by="team",
     )
-    ctx.add_standards([s1, s2, s3])
+    s4 = StandardRecord(
+        id=4,
+        is_number="IS 999",
+        part=None,
+        title="Old Withdrawn Equipment Standard",
+        publication_year=1995,
+        status="Withdrawn",
+        catalogue_url="https://standardsbis.bsbedge.com/record/4",
+        verified_on=datetime.date(2026, 10, 2),
+        verified_by="team",
+    )
+    s5 = StandardRecord(
+        id=5,
+        is_number="IS 555",
+        part="1",
+        title="Specialised Industrial Standard Part 1",
+        publication_year=2015,
+        status="Active",
+        catalogue_url="https://standardsbis.bsbedge.com/record/5",
+        verified_on=datetime.date(2026, 10, 2),
+        verified_by="team",
+    )
+    s6 = StandardRecord(
+        id=6,
+        is_number="IS 555-1",
+        part=None,
+        title="Allied General Specification",
+        publication_year=2015,
+        status="Active",
+        catalogue_url="https://standardsbis.bsbedge.com/record/6",
+        verified_on=datetime.date(2026, 10, 2),
+        verified_by="team",
+    )
+    ctx.add_standards([s1, s2, s3, s4, s5, s6])
 
     # Products
     p1 = ProductRecord(
@@ -511,6 +544,18 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         verified_by="team",
     )
     ctx.add_certification_rules([cr1, cr2])
+
+    # Allied Links
+    al1 = AlliedLinkRecord(
+        id=1,
+        source_standard_id=5,
+        target_standard_id=6,
+        relation="NORMATIVE",
+        source_url="https://standardsbis.bsbedge.com/record/5",
+        verified_on=datetime.date(2026, 10, 2),
+        verified_by="team",
+    )
+    ctx.add_allied_links([al1])
 
     # Vague Terms
     vt1 = VagueTermRecord(

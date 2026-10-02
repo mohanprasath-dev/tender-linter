@@ -364,9 +364,10 @@ def test_synthetic_matrix_t01_to_t13():
         reader = csv.DictReader(f)
         matrix = list(reader)
 
-    assert len(matrix) == 13
+    matrix_t01_t13 = [r for r in matrix if r["id"] in {f"T{i:02d}" for i in range(1, 14)}]
+    assert len(matrix_t01_t13) == 13
 
-    for row in matrix:
+    for row in matrix_t01_t13:
         t_id = row["id"]
         expected_rules = set(row["expected_rules"].split(";")) if row["expected_rules"] else set()
         clauses = get_mock_extractions_for_synthetic_row(t_id)
