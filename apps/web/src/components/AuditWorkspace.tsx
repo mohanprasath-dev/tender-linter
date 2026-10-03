@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { MATRIX_CASES } from '../data/matrixCases';
 import {
   createAudit,
+  downloadReport,
   editClauseExtractions,
-  fetchReport,
   recordFindingDecision,
 } from '../services/api';
 import { AuditResponse, Clause, FindingEvidence, Severity } from '../types';
 import { EvidenceDrawer } from './EvidenceDrawer';
 import { ExtractionModal } from './ExtractionModal';
+import { HistoryDiffModal } from './HistoryDiffModal';
 
 interface AuditWorkspaceProps {
   initialClause?: string;
@@ -35,6 +36,8 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
     ruleId: string;
   } | null>(null);
   const [editingClause, setEditingClause] = useState<Clause | null>(null);
+  const [showDiffModal, setShowDiffModal] = useState<boolean>(false);
+
 
   // Dismiss reason prompt modal/state
   const [dismissFindingId, setDismissFindingId] = useState<string | null>(null);
@@ -116,33 +119,15 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
     setAudit(updatedAudit);
   };
 
-  const handleExport = async (format: 'json' | 'csv') => {
+  const handleExport = async (format: 'pdf' | 'docx' | 'csv' | 'json') => {
     if (!audit) return;
     try {
-      const rep = await fetchReport(audit.id, format);
-      const filename = `tender_linter_audit_${audit.id}.${format}`;
-      let blob: Blob;
-
-      if (format === 'csv' && rep.text) {
-        blob = new Blob([rep.text], { type: 'text/csv;charset=utf-8;' });
-      } else {
-        blob = new Blob([JSON.stringify(rep.json, null, 2)], {
-          type: 'application/json',
-        });
-      }
-
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      await downloadReport(audit.id, format);
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Export failed');
     }
   };
+
 
   const filteredFindings = audit
     ? audit.findings.filter((f) => {
@@ -274,7 +259,84 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
 
       {/* Main Audit Results Split View */}
       {audit && (
-        <div className="audit-results-grid">
+        <>
+          <div
+            className="audit-toolbar card"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1rem',
+              padding: '0.75rem 1rem',
+              flexWrap: 'wrap',
+              gap: '0.75rem',
+            }}
+          >
+            <div>
+              <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-main)' }}>
+                Audit #{audit.id.slice(0, 8)}
+              </span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginLeft: '8px' }}>
+                ({audit.clauses.length} clauses, {audit.findings.length} findings)
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setShowDiffModal(true)}
+                style={{ fontSize: '0.8rem', padding: '5px 10px' }}
+              >
+                History & Diff
+              </button>
+
+              <span style={{ color: 'var(--border-color)', margin: '0 4px' }}>|</span>
+
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Export Report:
+              </span>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => void handleExport('pdf')}
+                style={{ fontSize: '0.8rem', padding: '5px 8px' }}
+                title="Bilingual PDF with evidence links and verification dates"
+              >
+                PDF
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => void handleExport('docx')}
+                style={{ fontSize: '0.8rem', padding: '5px 8px' }}
+                title="Word document with bilingual findings tables"
+              >
+                DOCX
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => void handleExport('csv')}
+                style={{ fontSize: '0.8rem', padding: '5px 8px' }}
+                title="Spreadsheet of findings and evidence URLs"
+              >
+                CSV
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => void handleExport('json')}
+                style={{ fontSize: '0.8rem', padding: '5px 8px' }}
+                title="Structured JSON findings payload"
+              >
+                JSON
+              </button>
+            </div>
+          </div>
+
+          <div className="audit-results-grid">
+
           {/* Left Column: Clauses and Span Highlights */}
           <div className="clauses-column">
             <div className="column-header">
@@ -499,7 +561,8 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
             </div>
           </div>
         </div>
-      )}
+      </>
+    )}
 
       {/* Evidence Drawer */}
       {activeEvidence && (
@@ -568,6 +631,14 @@ export const AuditWorkspace: React.FC<AuditWorkspaceProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* History and Diff Modal */}
+      {showDiffModal && (
+        <HistoryDiffModal
+          currentAuditId={audit?.id}
+          onClose={() => setShowDiffModal(false)}
+        />
       )}
     </div>
   );
