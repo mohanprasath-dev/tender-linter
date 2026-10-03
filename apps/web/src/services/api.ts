@@ -1,9 +1,14 @@
 import {
   AuditDiffResponse,
+  AuditLogRecord,
   AuditResponse,
   AuditSummary,
+  BulkImportReport,
   Finding,
   HealthData,
+  RuleItem,
+  StandardRow,
+  VagueTerm,
   VersionData,
 } from '../types';
 
@@ -249,3 +254,151 @@ export async function fetchVersion(): Promise<VersionData> {
   }
   return (await resp.json()) as VersionData;
 }
+
+export async function fetchUnverifiedQueue(): Promise<StandardRow[]> {
+  const headers = await authHeaders();
+  const resp = await fetch('/api/v1/admin/queue/unverified', { headers });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch unverified queue (${resp.status})`);
+  }
+  return (await resp.json()) as StandardRow[];
+}
+
+export async function verifyStandardRow(rowId: number): Promise<StandardRow> {
+  const headers = await authHeaders();
+  const resp = await fetch(`/api/v1/admin/rows/${rowId}/verify`, {
+    method: 'POST',
+    headers,
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.detail || `Failed to verify standard (${resp.status})`);
+  }
+  return (await resp.json()) as StandardRow;
+}
+
+export async function fetchStaleRows(staleDays = 180): Promise<StandardRow[]> {
+  const headers = await authHeaders();
+  const resp = await fetch(`/api/v1/admin/stale?stale_days=${staleDays}`, { headers });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch stale standards (${resp.status})`);
+  }
+  return (await resp.json()) as StandardRow[];
+}
+
+export async function reverifyStandardRow(
+  rowId: number,
+  evidenceRef: string
+): Promise<StandardRow> {
+  const headers = await authHeaders();
+  const resp = await fetch(`/api/v1/admin/rows/${rowId}/re-verify`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ evidence_ref: evidenceRef }),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.detail || `Failed to re-verify standard (${resp.status})`);
+  }
+  return (await resp.json()) as StandardRow;
+}
+
+export async function createStandardRow(row: {
+  is_number: string;
+  part?: string | null;
+  section?: string | null;
+  title: string;
+  publication_year?: number | null;
+  status: string;
+  catalogue_url: string;
+  evidence_ref: string;
+}): Promise<StandardRow> {
+  const headers = await authHeaders();
+  const resp = await fetch('/api/v1/admin/rows', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(row),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.detail || `Failed to create standard row (${resp.status})`);
+  }
+  return (await resp.json()) as StandardRow;
+}
+
+export async function bulkImportCsv(file: File): Promise<BulkImportReport> {
+  const token = await ensureAuthToken();
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const resp = await fetch('/api/v1/admin/import-csv', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.detail || `CSV Import failed (${resp.status})`);
+  }
+  return (await resp.json()) as BulkImportReport;
+}
+
+export async function fetchVagueTerms(): Promise<VagueTerm[]> {
+  const headers = await authHeaders();
+  const resp = await fetch('/api/v1/admin/vague-terms', { headers });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch vague terms (${resp.status})`);
+  }
+  return (await resp.json()) as VagueTerm[];
+}
+
+export async function createVagueTerm(term: {
+  phrase: string;
+  language: string;
+  explanation: string;
+}): Promise<VagueTerm> {
+  const headers = await authHeaders();
+  const resp = await fetch('/api/v1/admin/vague-terms', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(term),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.detail || `Failed to create vague term (${resp.status})`);
+  }
+  return (await resp.json()) as VagueTerm;
+}
+
+export async function deleteVagueTerm(termId: number): Promise<void> {
+  const headers = await authHeaders();
+  const resp = await fetch(`/api/v1/admin/vague-terms/${termId}`, {
+    method: 'DELETE',
+    headers,
+  });
+  if (!resp.ok) {
+    throw new Error(`Failed to delete vague term (${resp.status})`);
+  }
+}
+
+export async function fetchRulesCatalog(): Promise<RuleItem[]> {
+  const headers = await authHeaders();
+  const resp = await fetch('/api/v1/admin/rules', { headers });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch rules catalog (${resp.status})`);
+  }
+  return (await resp.json()) as RuleItem[];
+}
+
+export async function fetchAuditLogs(limit = 100): Promise<AuditLogRecord[]> {
+  const headers = await authHeaders();
+  const resp = await fetch(`/api/v1/admin/audit-logs?limit=${limit}`, { headers });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch audit logs (${resp.status})`);
+  }
+  return (await resp.json()) as AuditLogRecord[];
+}
+
