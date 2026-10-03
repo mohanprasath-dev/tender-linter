@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { AuditWorkspace } from './components/AuditWorkspace';
+import { CurationConsole } from './components/CurationConsole';
 import { Header } from './components/Header';
 import { MatrixRunner } from './components/MatrixRunner';
 import { SystemHealth } from './components/SystemHealth';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'workspace' | 'matrix' | 'health'>('workspace');
+  const [activeTab, setActiveTab] = useState<'workspace' | 'matrix' | 'curation' | 'health'>('workspace');
   const [workspaceClause, setWorkspaceClause] = useState<string>('');
   const [workspaceLanguage, setWorkspaceLanguage] = useState<string>('en');
 
@@ -35,6 +36,8 @@ export const App: React.FC = () => {
         {activeTab === 'matrix' && (
           <MatrixRunner onLoadClause={handleLoadClause} />
         )}
+
+        {activeTab === 'curation' && <CurationConsole />}
 
         {activeTab === 'health' && <SystemHealth />}
       </main>

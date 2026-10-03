@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface HeaderProps {
-  activeTab: 'workspace' | 'matrix' | 'health';
-  onTabChange: (tab: 'workspace' | 'matrix' | 'health') => void;
+  activeTab: 'workspace' | 'matrix' | 'curation' | 'health';
+  onTabChange: (tab: 'workspace' | 'matrix' | 'curation' | 'health') => void;
   ruleSetVersion?: string | null;
 }
 
@@ -52,6 +52,14 @@ export const Header: React.FC<HeaderProps> = ({
             aria-selected={activeTab === 'matrix'}
           >
             T01 - T13 Test Matrix
+          </button>
+          <button
+            type="button"
+            className={`tab-button ${activeTab === 'curation' ? 'active' : ''}`}
+            onClick={() => onTabChange('curation')}
+            aria-selected={activeTab === 'curation'}
+          >
+            Curation Console
           </button>
           <button
             type="button"

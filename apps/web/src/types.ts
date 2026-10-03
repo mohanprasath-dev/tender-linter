@@ -130,3 +130,54 @@ export interface AuditDiffResponse {
   };
 }
 
+export interface StandardRow {
+  id: number;
+  is_number: string;
+  part?: string | null;
+  section?: string | null;
+  title: string;
+  publication_year?: number | null;
+  status: string;
+  catalogue_url: string;
+  verified_on: string;
+  verified_by: string;
+  second_checked_by?: string | null;
+  evidence_ref: string;
+}
+
+export interface BulkImportReport {
+  total_rows: number;
+  imported_count: number;
+  rejected_count: number;
+  errors: Array<{ line: number; reason: string }>;
+}
+
+export interface VagueTerm {
+  id: number;
+  phrase: string;
+  language: string;
+  explanation: string;
+}
+
+export interface RuleItem {
+  id: string;
+  name: string;
+  severity: Severity;
+  fires_when: string;
+  evidence: string;
+  message_en: string;
+  message_hi?: string | null;
+}
+
+export interface AuditLogRecord {
+  id: number;
+  timestamp: string;
+  user_id?: number | null;
+  action: string;
+  table_name: string;
+  record_id: number;
+  old_values?: string | null;
+  new_values?: string | null;
+}
+
+
