@@ -1,0 +1,21 @@
+name: Demo Host Keepalive and Warm-up
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent serverless / hobby-tier container sleep
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Demo Health Probe
+        run: |
+          URL="${{ secrets.DEMO_URL || 'https://tender-linter.demo.gov.in/health/ready' }}"
+          echo "Pinging $URL..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$URL" || echo "000")
+          echo "HTTP Status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -ne 200 ] && [ "$HTTP_STATUS" -ne 000 ]; then
+            echo "Warning: Received HTTP $HTTP_STATUS from health check"
+          fi

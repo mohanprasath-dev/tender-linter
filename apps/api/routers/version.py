@@ -28,11 +28,12 @@ def get_rule_set_version() -> str | None:
 
 
 @router.get("/version", response_model=VersionResponse)
-def get_version() -> VersionResponse:
-    """Return version details for app, rule set, model, and prompt."""
+def get_version(include_runtime: bool = False) -> VersionResponse:
+    """Return version details for app, rule set, model, prompt, and data snapshot."""
     return VersionResponse(
         app=settings.APP_VERSION,
         rule_set=get_rule_set_version(),
-        model=None,
-        prompt=None,
+        model=settings.MODEL_ID_PRIMARY if include_runtime else None,
+        prompt="extract_v1" if include_runtime else None,
+        data_snapshot="2026-10-03.v1",
     )
