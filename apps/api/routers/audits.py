@@ -254,10 +254,10 @@ def create_audit(
     db.commit()
 
     return AuditResponse(
-        id=audit_session.id,
-        document_name=audit_session.document_name,
-        status=audit_session.status,
-        language_hint=audit_session.language_hint,
+        id=audit_id,
+        document_name=audit_in.document_name or "pasted.txt",
+        status="COMPLETED",
+        language_hint=audit_in.language_hint or "en",
         clauses=[ClauseResponse(**c) for c in clauses_data],
         findings=[FindingResponse(**f) for f in all_findings],
     )
