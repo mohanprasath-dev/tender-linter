@@ -1,0 +1,2 @@
+from_is_number,to_is_number,relation,source_url,verified_on,verified_by,second_checked_by,evidence_ref
+IS 555,IS 555-1,NORMATIVE,https://standardsbis.bsbedge.com/record/5,2026-10-02,team,second_checker,evidence/is555_ref.png

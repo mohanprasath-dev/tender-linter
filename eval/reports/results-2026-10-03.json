@@ -2,7 +2,7 @@
   "set_name": "synthetic-v1",
   "description": "Expanded synthetic test corpus v1 with 65 clauses across English, Hindi, and mixed language.",
   "rule_set_version": "0.1.0",
-  "total_clauses": 65,
+  "total_clauses": 75,
   "results": [
     {
       "id": "T01",
@@ -18,7 +18,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.32
+      "latency_ms": 0.23
     },
     {
       "id": "T02",
@@ -32,7 +32,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.09
+      "latency_ms": 0.19
     },
     {
       "id": "T03",
@@ -46,7 +46,7 @@
         "R03"
       ],
       "passed": true,
-      "latency_ms": 0.06
+      "latency_ms": 0.14
     },
     {
       "id": "T04",
@@ -60,7 +60,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.05
+      "latency_ms": 0.1
     },
     {
       "id": "T05",
@@ -74,7 +74,7 @@
         "R07"
       ],
       "passed": true,
-      "latency_ms": 0.04
+      "latency_ms": 0.08
     },
     {
       "id": "T06",
@@ -90,7 +90,7 @@
         "R09"
       ],
       "passed": true,
-      "latency_ms": 0.04
+      "latency_ms": 0.1
     },
     {
       "id": "T07",
@@ -104,7 +104,7 @@
         "R10"
       ],
       "passed": true,
-      "latency_ms": 0.05
+      "latency_ms": 0.04
     },
     {
       "id": "T08",
@@ -118,7 +118,7 @@
         "R01"
       ],
       "passed": true,
-      "latency_ms": 0.09
+      "latency_ms": 0.11
     },
     {
       "id": "T09",
@@ -134,7 +134,7 @@
         "R11"
       ],
       "passed": true,
-      "latency_ms": 0.1
+      "latency_ms": 0.11
     },
     {
       "id": "T10",
@@ -148,7 +148,7 @@
         "R12"
       ],
       "passed": true,
-      "latency_ms": 0.1
+      "latency_ms": 0.09
     },
     {
       "id": "T11",
@@ -188,7 +188,7 @@
       "expected": [],
       "got": [],
       "passed": true,
-      "latency_ms": 0.04
+      "latency_ms": 0.03
     },
     {
       "id": "T14",
@@ -268,7 +268,7 @@
       "expected": [],
       "got": [],
       "passed": true,
-      "latency_ms": 0.04
+      "latency_ms": 0.03
     },
     {
       "id": "T22",
@@ -322,7 +322,7 @@
         "R12"
       ],
       "passed": true,
-      "latency_ms": 0.08
+      "latency_ms": 0.1
     },
     {
       "id": "T27",
@@ -338,7 +338,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.07
+      "latency_ms": 0.06
     },
     {
       "id": "T28",
@@ -354,7 +354,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.06
+      "latency_ms": 0.05
     },
     {
       "id": "T29",
@@ -372,7 +372,7 @@
         "R09"
       ],
       "passed": true,
-      "latency_ms": 0.06
+      "latency_ms": 0.05
     },
     {
       "id": "T30",
@@ -402,7 +402,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.07
+      "latency_ms": 0.06
     },
     {
       "id": "T32",
@@ -420,7 +420,7 @@
         "R09"
       ],
       "passed": true,
-      "latency_ms": 0.05
+      "latency_ms": 0.04
     },
     {
       "id": "T33",
@@ -436,7 +436,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.3
+      "latency_ms": 0.05
     },
     {
       "id": "T34",
@@ -454,7 +454,7 @@
         "R09"
       ],
       "passed": true,
-      "latency_ms": 0.07
+      "latency_ms": 0.05
     },
     {
       "id": "T35",
@@ -502,7 +502,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.05
+      "latency_ms": 0.06
     },
     {
       "id": "T38",
@@ -518,7 +518,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.05
+      "latency_ms": 0.06
     },
     {
       "id": "T39",
@@ -560,7 +560,7 @@
         "R10"
       ],
       "passed": true,
-      "latency_ms": 0.01
+      "latency_ms": 0.02
     },
     {
       "id": "T42",
@@ -588,7 +588,7 @@
         "R10"
       ],
       "passed": true,
-      "latency_ms": 0.01
+      "latency_ms": 0.02
     },
     {
       "id": "T44",
@@ -644,7 +644,7 @@
         "R10"
       ],
       "passed": true,
-      "latency_ms": 0.01
+      "latency_ms": 0.02
     },
     {
       "id": "T48",
@@ -672,7 +672,7 @@
         "R10"
       ],
       "passed": true,
-      "latency_ms": 0.03
+      "latency_ms": 0.02
     },
     {
       "id": "T50",
@@ -714,7 +714,7 @@
         "R03"
       ],
       "passed": true,
-      "latency_ms": 0.04
+      "latency_ms": 0.05
     },
     {
       "id": "T53",
@@ -732,7 +732,7 @@
         "R06"
       ],
       "passed": true,
-      "latency_ms": 0.06
+      "latency_ms": 0.07
     },
     {
       "id": "T54",
@@ -917,17 +917,153 @@
       ],
       "passed": true,
       "latency_ms": 0.04
+    },
+    {
+      "id": "T66",
+      "language": "en",
+      "kind": "clean",
+      "clause": "The contractor shall supply 500 bags of Ordinary Portland Cement conforming to IS 269: 2015 bearing the mandatory ISI mark as per Cement Quality Control Order.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T67",
+      "language": "hi",
+      "kind": "clean",
+      "clause": "ठेकेदार 200 बैग ऑर्डिनरी पोर्टलैंड सीमेंट की आपूर्ति करेगा जो IS 269: 2015 के अनुरूप होगी और अनिवार्य गुणवत्ता नियंत्रण आदेश (QCO) के तहत प्रमाणित होगी।",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T68",
+      "language": "mixed",
+      "kind": "clean",
+      "clause": "The vendor shall deliver 100 bags of cement (सीमेंट) conforming to IS 269: 2015 with mandatory BIS certification mark.",
+      "expected": [],
+      "got": [],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T69",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall deliver 300 bags of Ordinary Portland Cement conforming to IS 269: 2015.",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.05
+    },
+    {
+      "id": "T70",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The contractor shall supply Ordinary Portland Cement conforming to IS 269: 1989 with ISI mark certification as per QCO.",
+      "expected": [
+        "R03"
+      ],
+      "got": [
+        "R03"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T71",
+      "language": "hi",
+      "kind": "defect",
+      "clause": "आपूर्तिकर्ता 500 बोरी साधारण पोर्टलैंड सीमेंट IS 269: 2015 के अनुरूप प्रदान करेगा।",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T72",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The tenderer shall supply 400 bags of Portland cement for foundation work.",
+      "expected": [
+        "R06",
+        "R07"
+      ],
+      "got": [
+        "R06",
+        "R07"
+      ],
+      "passed": true,
+      "latency_ms": 0.03
+    },
+    {
+      "id": "T73",
+      "language": "en",
+      "kind": "defect",
+      "clause": "The supplier shall supply 200 bags of Ordinary Portland Cement conforming to IS 13252 (Part 1): 2010 with ISI mark.",
+      "expected": [
+        "R05",
+        "R13"
+      ],
+      "got": [
+        "R05",
+        "R13"
+      ],
+      "passed": true,
+      "latency_ms": 0.06
+    },
+    {
+      "id": "T74",
+      "language": "hi",
+      "kind": "adversarial",
+      "clause": "निर्माण कार्य हेतु २०० बोरी सीमेंट IS २६९: २०१५ के अनुरूप आपूर्ति की जाएगी।",
+      "expected": [
+        "R06"
+      ],
+      "got": [
+        "R06"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
+    },
+    {
+      "id": "T75",
+      "language": "en",
+      "kind": "adversarial",
+      "clause": "Contractor must provide Ordinary Portland Cement of best ISI quality as per government norms.",
+      "expected": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "got": [
+        "R06",
+        "R07",
+        "R09"
+      ],
+      "passed": true,
+      "latency_ms": 0.04
     }
   ],
   "metrics": {
     "rule_recall": {
-      "total_expected": 40,
-      "caught": 40,
+      "total_expected": 47,
+      "caught": 47,
       "missed": 0,
       "missed_details": []
     },
     "false_alarms": {
-      "clean_total": 13,
+      "clean_total": 16,
       "count": 0,
       "details": []
     },
@@ -937,34 +1073,34 @@
       "details": []
     },
     "adversarial_robustness": {
-      "total": 13,
-      "passed": 13,
+      "total": 15,
+      "passed": 15,
       "details": []
     },
     "languages": {
       "en": {
-        "passed": 46,
-        "total": 46
+        "passed": 52,
+        "total": 52
       },
       "hi": {
-        "passed": 11,
-        "total": 11
+        "passed": 14,
+        "total": 14
       },
       "mixed": {
-        "passed": 8,
-        "total": 8
+        "passed": 9,
+        "total": 9
       }
     },
     "evidence_completeness": {
-      "total_applicable": 54,
-      "complete": 54,
+      "total_applicable": 64,
+      "complete": 64,
       "missing": 0
     },
     "latency": {
       "p50_ms": 0.04,
-      "p95_ms": 0.1,
+      "p95_ms": 0.11,
       "avg_ms": 0.05,
-      "total_ms": 3.5
+      "total_ms": 3.87
     }
   }
 }

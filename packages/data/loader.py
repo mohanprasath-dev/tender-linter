@@ -6,6 +6,8 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from packages.data.models import (
+    AlliedLink,
+    CertificationRule,
     Product,
     ProductStandardMap,
     Standard,
@@ -187,6 +189,97 @@ def load_seed_data(session: Session, seed_dir: Path | None = None) -> dict[str, 
                         session.add(psm)
                         count += 1
         loaded_counts["product_standard_map"] = count
+
+    # 4. Load certification_rules
+    cert_file = seed_dir / "certification_rules.csv"
+    if cert_file.exists():
+        count = 0
+        with cert_file.open(newline="", encoding="utf-8") as fh:
+            reader = csv.DictReader(fh)
+            for idx, row in enumerate(reader, start=2):
+                problems = validate_row_provenance("certification_rules", row)
+                if problems:
+                    raise ValueError(
+                        f"certification_rules.csv line {idx} failed check: {'; '.join(problems)}"
+                    )
+
+                prod_name = row["product"].strip()
+                is_num = row["specified_is_number"].strip()
+                prod = (
+                    product_map.get(prod_name)
+                    or session.query(Product).filter_by(canonical_name=prod_name).first()
+                )
+                std = (
+                    standard_map.get(is_num)
+                    or session.query(Standard).filter_by(is_number=is_num).first()
+                )
+
+                if prod and std:
+                    existing = (
+                        session.query(CertificationRule)
+                        .filter_by(product_id=prod.id, specified_standard_id=std.id)
+                        .first()
+                    )
+                    if not existing:
+                        c_rule = CertificationRule(
+                            product_id=prod.id,
+                            scheme=row["scheme"].strip(),
+                            specified_standard_id=std.id,
+                            instrument=row["instrument"].strip(),
+                            source_url=row["source_url"].strip(),
+                            verified_on=date.fromisoformat(row["verified_on"].strip()),
+                            verified_by=row["verified_by"].strip(),
+                            second_checked_by=(row.get("second_checked_by") or None),
+                            evidence_ref=row["evidence_ref"].strip(),
+                        )
+                        session.add(c_rule)
+                        count += 1
+        loaded_counts["certification_rules"] = count
+
+    # 5. Load allied_links
+    allied_file = seed_dir / "allied_links.csv"
+    if allied_file.exists():
+        count = 0
+        with allied_file.open(newline="", encoding="utf-8") as fh:
+            reader = csv.DictReader(fh)
+            for idx, row in enumerate(reader, start=2):
+                problems = validate_row_provenance("allied_links", row)
+                if problems:
+                    raise ValueError(
+                        f"allied_links.csv line {idx} failed check: {'; '.join(problems)}"
+                    )
+
+                from_num = row["from_is_number"].strip()
+                to_num = row["to_is_number"].strip()
+                from_std = (
+                    standard_map.get(from_num)
+                    or session.query(Standard).filter_by(is_number=from_num).first()
+                )
+                to_std = (
+                    standard_map.get(to_num)
+                    or session.query(Standard).filter_by(is_number=to_num).first()
+                )
+
+                if from_std and to_std:
+                    existing = (
+                        session.query(AlliedLink)
+                        .filter_by(from_standard_id=from_std.id, to_standard_id=to_std.id)
+                        .first()
+                    )
+                    if not existing:
+                        alink = AlliedLink(
+                            from_standard_id=from_std.id,
+                            to_standard_id=to_std.id,
+                            relation=row["relation"].strip(),
+                            source_url=row["source_url"].strip(),
+                            verified_on=date.fromisoformat(row["verified_on"].strip()),
+                            verified_by=row["verified_by"].strip(),
+                            second_checked_by=(row.get("second_checked_by") or None),
+                            evidence_ref=row["evidence_ref"].strip(),
+                        )
+                        session.add(alink)
+                        count += 1
+        loaded_counts["allied_links"] = count
 
     session.commit()
     return loaded_counts
