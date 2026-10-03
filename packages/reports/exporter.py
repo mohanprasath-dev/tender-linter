@@ -37,6 +37,7 @@ def export_csv_report(
 ) -> str:
     """Generate RFC-4180 compliant CSV export for audit findings with evidence links."""
     output = io.StringIO()
+    output.write(f"# {BANNER_TEXT}\n")
     writer = csv.writer(output)
     writer.writerow(
         [
