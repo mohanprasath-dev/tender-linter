@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from apps.api.core.config import settings
+from apps.api.core.middleware import RequestTracingMiddleware
 from apps.api.routers import admin, audits, auth, health, products, standards, version
 from packages.data.db import init_db
 
@@ -27,7 +28,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Configure CORS
+# Configure Middlewares (Tracing and CORS)
+app.add_middleware(RequestTracingMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins if settings.cors_origins else ["*"],
