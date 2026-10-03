@@ -85,3 +85,48 @@ export interface VersionData {
   model: string | null;
   prompt: string | null;
 }
+
+export interface AuditSummary {
+  id: string;
+  document_name?: string | null;
+  created_at: string;
+  created_by: string;
+  status: string;
+  language_hint: string;
+  total_clauses: number;
+  total_findings: number;
+}
+
+export interface ClauseDiffItem {
+  id: string;
+  old_text?: string;
+  new_text?: string;
+  text?: string;
+}
+
+export interface ClauseDiff {
+  added: ClauseDiffItem[];
+  removed: ClauseDiffItem[];
+  modified: ClauseDiffItem[];
+  unchanged: ClauseDiffItem[];
+}
+
+export interface AuditDiffResponse {
+  draft_a_id: string;
+  draft_b_id: string;
+  added_findings: Finding[];
+  resolved_findings: Finding[];
+  retained_findings: Finding[];
+  clause_diff: ClauseDiff;
+  summary: {
+    total_findings_draft_a: number;
+    total_findings_draft_b: number;
+    added_count: number;
+    resolved_count: number;
+    retained_count: number;
+    clauses_added_count: number;
+    clauses_modified_count: number;
+    clauses_removed_count: number;
+  };
+}
+

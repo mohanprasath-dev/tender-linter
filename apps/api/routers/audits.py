@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import csv
-import io
 import json
 import uuid
 from datetime import UTC, datetime
@@ -24,8 +22,9 @@ from sqlalchemy.orm import Session
 from apps.api.core.auth import get_current_user
 from apps.api.schemas.audits import (
     AuditCreateRequest,
-    AuditReportResponse,
+    AuditDiffResponse,
     AuditResponse,
+    AuditSummaryResponse,
     ClauseResponse,
     ExtractionEditRequest,
     FindingDecisionRequest,
@@ -36,6 +35,13 @@ from packages.data.models import AuditLog, AuditSession, User
 from packages.extraction import RegexExtractor, validate_extraction_spans
 from packages.ingestion import IngestionService
 from packages.mapping.product_mapper import ProductMapper
+from packages.reports import (
+    analyze_audit_diff,
+    export_csv_report,
+    export_json_report,
+    generate_docx_report,
+    generate_pdf_report,
+)
 from packages.rules.context import create_rule_context_from_db
 from packages.rules.engine import CERTIFICATION_TERMS_LOWER, RulesEngine
 from packages.rules.loader import load_rules_from_yaml
@@ -338,6 +344,40 @@ async def upload_audit(
     )
 
 
+@router.get("", response_model=list[AuditSummaryResponse])
+def list_audits(
+    limit: int = Query(default=50, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> list[AuditSummaryResponse]:
+    """List recent audit sessions for history and diff comparison."""
+    stmt = (
+        select(AuditSession)
+        .order_by(AuditSession.created_at.desc())
+        .limit(limit)
+        .offset(offset)
+    )
+    sessions = db.execute(stmt).scalars().all()
+    results = []
+    for s in sessions:
+        clauses = json.loads(s.clauses_json)
+        findings = json.loads(s.findings_json)
+        results.append(
+            AuditSummaryResponse(
+                id=s.id,
+                document_name=s.document_name,
+                created_at=s.created_at.isoformat(),
+                created_by=s.created_by,
+                status=s.status,
+                language_hint=s.language_hint,
+                total_clauses=len(clauses),
+                total_findings=len(findings),
+            )
+        )
+    return results
+
+
 @router.get("/{audit_id}", response_model=AuditResponse)
 def get_audit(
     audit_id: str,
@@ -502,7 +542,7 @@ def export_audit_report(
     format: str = Query(default="json", pattern="^(json|csv|pdf|docx)$"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-) -> Any:
+) -> Response:
     """Export evidence-linked audit report in JSON, CSV, PDF, or DOCX format."""
     session = db.execute(
         select(AuditSession).where(AuditSession.id == audit_id)
@@ -515,69 +555,62 @@ def export_audit_report(
 
     clauses = json.loads(session.clauses_json)
     findings = json.loads(session.findings_json)
-    banner_text = "This tool flags issues for the officer to review. It does not approve or reject a tender."
+    audit_meta = {
+        "id": session.id,
+        "document_name": session.document_name,
+        "created_at": session.created_at.isoformat(),
+        "created_by": session.created_by,
+        "status": session.status,
+        "language_hint": session.language_hint,
+    }
 
+    short_id = session.id[:8]
     if format == "json":
-        return AuditReportResponse(
-            audit_id=session.id,
-            document_name=session.document_name,
-            created_at=session.created_at.isoformat(),
-            status=session.status,
-            banner=banner_text,
-            total_clauses=len(clauses),
-            total_findings=len(findings),
-            findings=findings,
+        json_data = export_json_report(audit_meta, clauses, findings)
+        return Response(
+            content=json.dumps(json_data, indent=2),
+            media_type="application/json",
+            headers={"Content-Disposition": f'attachment; filename="tender_audit_{short_id}.json"'},
         )
 
     if format == "csv":
-        output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerow(
-            [
-                "Clause ID",
-                "Rule ID",
-                "Severity",
-                "English Message",
-                "Hindi Message",
-                "Evidence URL",
-                "Verified On",
-                "Decision",
-                "Decision Reason",
-            ]
+        csv_content = export_csv_report(audit_meta, clauses, findings)
+        return Response(
+            content=csv_content,
+            media_type="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="tender_audit_{short_id}.csv"'},
         )
-        for f in findings:
-            ev = f.get("evidence") or {}
-            writer.writerow(
-                [
-                    f.get("clause_id"),
-                    f.get("rule_id"),
-                    f.get("severity"),
-                    f.get("message_en"),
-                    f.get("message_hi"),
-                    ev.get("url"),
-                    ev.get("verified_on"),
-                    f.get("decision"),
-                    f.get("decision_reason"),
-                ]
-            )
-        return Response(content=output.getvalue(), media_type="text/csv")
 
-    # Fallback placeholder for pdf/docx export until M11
-    return {
-        "audit_id": session.id,
-        "format": format,
-        "message": f"Export in format '{format}' prepared.",
-    }
+    if format == "pdf":
+        pdf_bytes = generate_pdf_report(audit_meta, clauses, findings)
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="tender_audit_{short_id}.pdf"'},
+        )
+
+    if format == "docx":
+        docx_bytes = generate_docx_report(audit_meta, clauses, findings)
+        return Response(
+            content=docx_bytes,
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            headers={"Content-Disposition": f'attachment; filename="tender_audit_{short_id}.docx"'},
+        )
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail=f"Unsupported export format: {format}",
+    )
 
 
-@router.get("/{draft_a_id}/diff/{draft_b_id}")
+@router.get("/{draft_a_id}/diff/{draft_b_id}", response_model=AuditDiffResponse)
 def diff_audit_drafts(
     draft_a_id: str,
     draft_b_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-) -> dict[str, Any]:
-    """Compare findings between two tender draft audits."""
+) -> AuditDiffResponse:
+    """Compare findings and clauses between two tender draft audits."""
     session_a = db.execute(
         select(AuditSession).where(AuditSession.id == draft_a_id)
     ).scalar_one_or_none()
@@ -591,20 +624,26 @@ def diff_audit_drafts(
             detail="One or both audit draft sessions were not found",
         )
 
+    clauses_a = json.loads(session_a.clauses_json)
+    clauses_b = json.loads(session_b.clauses_json)
     findings_a = json.loads(session_a.findings_json)
     findings_b = json.loads(session_b.findings_json)
 
-    rules_a = {(f["clause_id"], f["rule_id"]): f for f in findings_a}
-    rules_b = {(f["clause_id"], f["rule_id"]): f for f in findings_b}
+    diff_result = analyze_audit_diff(
+        draft_a_id=draft_a_id,
+        draft_b_id=draft_b_id,
+        clauses_a=clauses_a,
+        clauses_b=clauses_b,
+        findings_a=findings_a,
+        findings_b=findings_b,
+    )
 
-    added = [rules_b[k] for k in rules_b.keys() - rules_a.keys()]
-    resolved = [rules_a[k] for k in rules_a.keys() - rules_b.keys()]
-    retained = [rules_b[k] for k in rules_a.keys() & rules_b.keys()]
-
-    return {
-        "draft_a": draft_a_id,
-        "draft_b": draft_b_id,
-        "added_findings": added,
-        "resolved_findings": resolved,
-        "retained_findings": retained,
-    }
+    return AuditDiffResponse(
+        draft_a_id=diff_result.draft_a_id,
+        draft_b_id=diff_result.draft_b_id,
+        added_findings=diff_result.added_findings,
+        resolved_findings=diff_result.resolved_findings,
+        retained_findings=diff_result.retained_findings,
+        clause_diff=diff_result.clause_diff.model_dump(),
+        summary=diff_result.summary,
+    )

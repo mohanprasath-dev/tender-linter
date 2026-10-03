@@ -66,3 +66,25 @@ class AuditReportResponse(BaseModel):
     total_clauses: int
     total_findings: int
     findings: list[dict[str, Any]]
+
+
+class AuditSummaryResponse(BaseModel):
+    id: str
+    document_name: str | None = None
+    created_at: str
+    created_by: str
+    status: str
+    language_hint: str
+    total_clauses: int
+    total_findings: int
+
+
+class AuditDiffResponse(BaseModel):
+    draft_a_id: str
+    draft_b_id: str
+    added_findings: list[dict[str, Any]]
+    resolved_findings: list[dict[str, Any]]
+    retained_findings: list[dict[str, Any]]
+    clause_diff: dict[str, Any]
+    summary: dict[str, Any]
+

@@ -1,4 +1,11 @@
-import { AuditResponse, Finding, HealthData, VersionData } from '../types';
+import {
+  AuditDiffResponse,
+  AuditResponse,
+  AuditSummary,
+  Finding,
+  HealthData,
+  VersionData,
+} from '../types';
 
 let cachedToken: string | null = null;
 
@@ -133,6 +140,74 @@ export async function editClauseExtractions(
   return (await resp.json()) as AuditResponse;
 }
 
+export async function downloadReport(
+  auditId: string,
+  format: 'pdf' | 'docx' | 'csv' | 'json'
+): Promise<void> {
+  const headers = await authHeaders();
+  const resp = await fetch(
+    `/api/v1/audits/${encodeURIComponent(auditId)}/report?format=${format}`,
+    {
+      headers,
+    }
+  );
+
+  if (!resp.ok) {
+    throw new Error(`Report download failed (${resp.status})`);
+  }
+
+  const blob = await resp.blob();
+  const disposition = resp.headers.get('content-disposition');
+  let filename = `tender_audit_${auditId.slice(0, 8)}.${format}`;
+  if (disposition && disposition.includes('filename=')) {
+    const match = disposition.match(/filename="?([^"]+)"?/);
+    if (match && match[1]) {
+      filename = match[1];
+    }
+  }
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+export async function listAudits(limit = 20): Promise<AuditSummary[]> {
+  const headers = await authHeaders();
+  const resp = await fetch(`/api/v1/audits?limit=${limit}`, {
+    headers,
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Failed to list audits (${resp.status})`);
+  }
+
+  return (await resp.json()) as AuditSummary[];
+}
+
+export async function fetchAuditDiff(
+  draftAId: string,
+  draftBId: string
+): Promise<AuditDiffResponse> {
+  const headers = await authHeaders();
+  const resp = await fetch(
+    `/api/v1/audits/${encodeURIComponent(draftAId)}/diff/${encodeURIComponent(draftBId)}`,
+    {
+      headers,
+    }
+  );
+
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch audit diff (${resp.status})`);
+  }
+
+  return (await resp.json()) as AuditDiffResponse;
+}
+
 export async function fetchReport(
   auditId: string,
   format: 'json' | 'csv'
@@ -157,6 +232,7 @@ export async function fetchReport(
     return { json };
   }
 }
+
 
 export async function fetchHealth(): Promise<HealthData> {
   const resp = await fetch('/api/v1/health');
