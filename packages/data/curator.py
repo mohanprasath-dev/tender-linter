@@ -49,10 +49,15 @@ def generate_coverage_report(seed_dir: Path | None = None) -> str:
 
     # Track entity counts
     product_count = 0
+    families_seen: set[str] = set()
     products_file = seed_dir / "products.csv"
     if products_file.exists():
         with products_file.open(newline="", encoding="utf-8") as fh:
-            product_count = sum(1 for _ in csv.DictReader(fh))
+            for p_row in csv.DictReader(fh):
+                product_count += 1
+                fam = (p_row.get("family") or "").strip()
+                if fam:
+                    families_seen.add(fam)
 
     standard_count = 0
     standards_file = seed_dir / "standards.csv"
@@ -91,16 +96,58 @@ def generate_coverage_report(seed_dir: Path | None = None) -> str:
                 if on:
                     dates_seen.add(on)
 
+    # Track certification rules
+    cert_file = seed_dir / "certification_rules.csv"
+    cert_count = 0
+    if cert_file.exists():
+        with cert_file.open(newline="", encoding="utf-8") as fh:
+            for row in csv.DictReader(fh):
+                cert_count += 1
+                problems = validate_row_provenance("certification_rules", row)
+                if problems:
+                    counts["FAIL"] += 1
+                elif not (row.get("second_checked_by") or "").strip():
+                    counts["AWAITING_SECOND_CHECK"] += 1
+                else:
+                    counts["VERIFIED"] += 1
+
+                on = (row.get("verified_on") or "").strip()
+                if on:
+                    dates_seen.add(on)
+
+    # Track allied links
+    allied_file = seed_dir / "allied_links.csv"
+    allied_count = 0
+    if allied_file.exists():
+        with allied_file.open(newline="", encoding="utf-8") as fh:
+            for row in csv.DictReader(fh):
+                allied_count += 1
+                problems = validate_row_provenance("allied_links", row)
+                if problems:
+                    counts["FAIL"] += 1
+                elif not (row.get("second_checked_by") or "").strip():
+                    counts["AWAITING_SECOND_CHECK"] += 1
+                else:
+                    counts["VERIFIED"] += 1
+
+                on = (row.get("verified_on") or "").strip()
+                if on:
+                    dates_seen.add(on)
+
     total_curated_rows = sum(counts.values())
     verified_date_str = ", ".join(sorted(dates_seen)) if dates_seen else "no dates verified yet"
+    families_str = ", ".join(sorted(families_seen)) if families_seen else "none"
 
     lines = [
         "===========================================================",
         "Tender Linter: Dataset Coverage Report",
         "===========================================================",
         f"Products in dataset: {product_count}",
+        f"Product families: {families_str}",
         f"Standards in dataset: {standard_count}",
         f"Product-Standard mappings: {map_count}",
+        f"Certification rules: {cert_count}",
+        f"Allied standard links: {allied_count}",
         f"Verification dates recorded: {verified_date_str}",
         "",
         "Provenance Verification Status:",

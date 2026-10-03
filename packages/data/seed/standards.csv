@@ -2,3 +2,5 @@ is_number,part,title,publication_year,status,superseded_by,amendments,catalogue_
 IS/IEC 62368 Part 1,1,,2023,UNKNOWN,,,,,,,
 IS 302-2-25,,"Safety of household and similar electrical appliances: Part 2 Particular requirements: Section 25 Microwave ovens",,UNKNOWN,,,,,,,
 IS 13252 (Part 1),1,"Information Technology Equipment - Safety Part 1: General Requirements (Second Revision)",2010,Active,,,,,,,
+IS 269,,"Ordinary Portland Cement - Specification",2015,Active,,,https://standardsbis.bsbedge.com/BIS_SearchStandard.aspx?Standard_Number=269,2026-10-03,Team OnFocus,Mohan Prasath,evidence/so191e_cement_qco_2003.pdf
+IS 4031 (Part 1),1,"Methods of physical tests for hydraulic cement: Part 1 Determination of fineness by dry sieving",1996,Active,,,https://standardsbis.bsbedge.com/BIS_SearchStandard.aspx?Standard_Number=4031,2026-10-03,Team OnFocus,Mohan Prasath,evidence/is4031_catalogue.png

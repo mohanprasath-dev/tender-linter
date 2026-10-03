@@ -450,7 +450,29 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         verified_on=datetime.date(2026, 10, 2),
         verified_by="team",
     )
-    ctx.add_standards([s1, s2, s3, s4, s5, s6])
+    s7 = StandardRecord(
+        id=7,
+        is_number="IS 269",
+        part=None,
+        title="Ordinary Portland Cement - Specification",
+        publication_year=2015,
+        status="Active",
+        catalogue_url="https://standardsbis.bsbedge.com/record/269",
+        verified_on=datetime.date(2026, 10, 3),
+        verified_by="Team OnFocus",
+    )
+    s8 = StandardRecord(
+        id=8,
+        is_number="IS 4031 (Part 1)",
+        part="1",
+        title="Methods of physical tests for hydraulic cement: Part 1 Determination of fineness by dry sieving",
+        publication_year=1996,
+        status="Active",
+        catalogue_url="https://standardsbis.bsbedge.com/record/4031",
+        verified_on=datetime.date(2026, 10, 3),
+        verified_by="Team OnFocus",
+    )
+    ctx.add_standards([s1, s2, s3, s4, s5, s6, s7, s8])
 
     # Products
     p1 = ProductRecord(
@@ -481,7 +503,14 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         synonyms_en=["it equipment"],
         synonyms_hi=["आईटी उपकरण", "आईटी उपस्कर", "सूचना प्रौद्योगिकी उपकरण"],
     )
-    ctx.add_products([p1, p2, p3, p4])
+    p5 = ProductRecord(
+        id=5,
+        canonical_name="Ordinary Portland Cement (OPC)",
+        family="Cement and concrete",
+        synonyms_en=["cement", "ordinary portland cement", "opc", "opc 43", "opc 53", "portland cement"],
+        synonyms_hi=["सीमेंट", "ऑर्डिनरी पोर्टलैंड सीमेंट", "ओपीसी", "पोर्टलैंड सीमेंट"],
+    )
+    ctx.add_products([p1, p2, p3, p4, p5])
 
     # Product-Standard Map
     psm1 = ProductStandardMapRecord(
@@ -520,7 +549,16 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         verified_on=datetime.date(2026, 10, 2),
         verified_by="team",
     )
-    ctx.add_product_standard_maps([psm1, psm2, psm3, psm4])
+    psm5 = ProductStandardMapRecord(
+        id=5,
+        product_id=5,
+        standard_id=7,
+        relation="PRIMARY",
+        source_url="https://bis.gov.in/index.php/qco-cement/",
+        verified_on=datetime.date(2026, 10, 3),
+        verified_by="Team OnFocus",
+    )
+    ctx.add_product_standard_maps([psm1, psm2, psm3, psm4, psm5])
 
     # Certification Rules
     cr1 = CertificationRuleRecord(
@@ -543,7 +581,17 @@ def create_seed_rule_context(stale_days: int = 180) -> InMemoryRuleDataContext:
         verified_on=datetime.date(2026, 10, 2),
         verified_by="team",
     )
-    ctx.add_certification_rules([cr1, cr2])
+    cr3 = CertificationRuleRecord(
+        id=3,
+        product_id=5,
+        scheme="QCO",
+        specified_standard_id=7,
+        instrument="Cement (Quality Control) Order, 2003 (S.O. 191(E))",
+        source_url="https://bis.gov.in/index.php/qco-cement/",
+        verified_on=datetime.date(2026, 10, 3),
+        verified_by="Team OnFocus",
+    )
+    ctx.add_certification_rules([cr1, cr2, cr3])
 
     # Allied Links
     al1 = AlliedLinkRecord(

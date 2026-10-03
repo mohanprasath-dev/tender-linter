@@ -399,5 +399,106 @@ def get_golden_extractions(row_id: str, clause_text: str = "") -> list[ClauseExt
                 mentions_certification=False,
             )
         ]
+    elif row_id == "T66":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "The contractor shall supply 500 bags of Ordinary Portland Cement conforming to IS 269: 2015 bearing the mandatory ISI mark as per Cement Quality Control Order.",
+                products=[ProductExtraction(text="Ordinary Portland Cement", span=(37, 61), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS 269: 2015", span=(76, 88), is_number="IS 269", year=2015)],
+                mentions_certification=True,
+            )
+        ]
+    elif row_id == "T67":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "ठेकेदार 200 बैग ऑर्डिनरी पोर्टलैंड सीमेंट की आपूर्ति करेगा जो IS 269: 2015 के अनुरूप होगी और अनिवार्य गुणवत्ता नियंत्रण आदेश (QCO) के तहत प्रमाणित होगी।",
+                products=[ProductExtraction(text="ऑर्डिनरी पोर्टलैंड सीमेंट", span=(16, 40), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS 269: 2015", span=(61, 73), is_number="IS 269", year=2015)],
+                mentions_certification=True,
+            )
+        ]
+    elif row_id == "T68":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "The vendor shall deliver 100 bags of cement (सीमेंट) conforming to IS 269: 2015 with mandatory BIS certification mark.",
+                products=[ProductExtraction(text="cement (सीमेंट)", span=(37, 52), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS 269: 2015", span=(68, 80), is_number="IS 269", year=2015)],
+                mentions_certification=True,
+            )
+        ]
+    elif row_id == "T69":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "The supplier shall deliver 300 bags of Ordinary Portland Cement conforming to IS 269: 2015.",
+                products=[ProductExtraction(text="Ordinary Portland Cement", span=(39, 63), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS 269: 2015", span=(78, 90), is_number="IS 269", year=2015)],
+                mentions_certification=False,
+            )
+        ]
+    elif row_id == "T70":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "The contractor shall supply Ordinary Portland Cement conforming to IS 269: 1989 with ISI mark certification as per QCO.",
+                products=[ProductExtraction(text="Ordinary Portland Cement", span=(28, 52), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS 269: 1989", span=(67, 79), is_number="IS 269", year=1989)],
+                mentions_certification=True,
+            )
+        ]
+    elif row_id == "T71":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "आपूर्तिकर्ता 500 बोरी साधारण पोर्टलैंड सीमेंट IS 269: 2015 के अनुरूप प्रदान करेगा।",
+                products=[ProductExtraction(text="साधारण पोर्टलैंड सीमेंट", span=(21, 44), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS 269: 2015", span=(45, 57), is_number="IS 269", year=2015)],
+                mentions_certification=False,
+            )
+        ]
+    elif row_id == "T72":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "The tenderer shall supply 400 bags of Portland cement for foundation work.",
+                products=[ProductExtraction(text="Portland cement", span=(38, 53), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[],
+                mentions_certification=False,
+            )
+        ]
+    elif row_id == "T73":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "The supplier shall supply 200 bags of Ordinary Portland Cement conforming to IS 13252 (Part 1): 2010 with ISI mark.",
+                products=[ProductExtraction(text="Ordinary Portland Cement", span=(38, 62), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS 13252 (Part 1): 2010", span=(77, 101), is_number="IS 13252 (Part 1)", part="1", year=2010)],
+                mentions_certification=True,
+            )
+        ]
+    elif row_id == "T74":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "निर्माण कार्य हेतु २०० बोरी सीमेंट IS २६९: २०१५ के अनुरूप आपूर्ति की जाएगी।",
+                products=[ProductExtraction(text="सीमेंट", span=(27, 33), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[CitationExtraction(raw="IS २६९: २०१५", span=(34, 46), is_number="IS 269", year=2015)],
+                mentions_certification=False,
+            )
+        ]
+    elif row_id == "T75":
+        return [
+            ClauseExtraction(
+                clause_id=row_id,
+                text=text or "Contractor must provide Ordinary Portland Cement of best ISI quality as per government norms.",
+                products=[ProductExtraction(text="Ordinary Portland Cement", span=(24, 48), canonical_product_id="Ordinary Portland Cement (OPC)")],
+                citations=[],
+                vague_phrases=[VaguePhraseExtraction(text="ISI quality", span=(57, 68), phrase="ISI quality")],
+                mentions_certification=False,
+            )
+        ]
 
     return []

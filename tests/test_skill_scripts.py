@@ -106,7 +106,9 @@ def test_provenance_awaiting_second():
 
 def test_seed_files_fail_until_filled():
     rows = prov.check_file(ROOT / "packages/data/seed/standards.csv")
-    assert rows and all(s == "FAIL" for _, s, _ in rows)
+    # Unfilled initial seed rows fail provenance check, while curated rows pass
+    assert rows and any(s == "FAIL" for _, s, _ in rows)
+    assert any(s == "VERIFIED" for _, s, _ in rows)
 
 
 # ---- spans ----
