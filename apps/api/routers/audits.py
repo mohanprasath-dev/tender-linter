@@ -19,7 +19,12 @@ from fastapi import (
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from apps.api.core.auth import get_current_user
+from apps.api.core.auth import get_current_user, require_role
+from apps.api.core.security import (
+    delete_audit_session,
+    purge_expired_audit_sessions,
+    validate_upload_safety,
+)
 from apps.api.schemas.audits import (
     AuditCreateRequest,
     AuditDiffResponse,
@@ -267,11 +272,7 @@ async def upload_audit(
 ) -> AuditResponse:
     """Ingest a DOCX, PDF, or text tender document, segment clauses, and run audit."""
     content = await file.read()
-    if not content:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Uploaded file is empty",
-        )
+    validate_upload_safety(content, file.filename or "uploaded_tender.txt")
 
     ingest_svc = IngestionService()
     parsed_doc = ingest_svc.ingest_bytes(content, filename=file.filename or "uploaded_tender")
@@ -647,3 +648,35 @@ def diff_audit_drafts(
         clause_diff=diff_result.clause_diff.model_dump(),
         summary=diff_result.summary,
     )
+
+
+@router.delete("/{audit_id}", status_code=status.HTTP_204_NO_CONTENT)
+def remove_audit(
+    audit_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> None:
+    """Perform one-click complete deletion of a confidential audit draft."""
+    deleted = delete_audit_session(db, audit_id, current_user)
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Audit session {audit_id} not found",
+        )
+
+
+@router.post("/purge")
+def purge_audits(
+    max_age_days: int = Query(default=30, ge=1, le=365),
+    current_user: User = Depends(require_role(["Admin"])),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Purge confidential audit sessions older than the specified retention threshold."""
+    purged_count = purge_expired_audit_sessions(db, max_age_days=max_age_days)
+    return {
+        "status": "SUCCESS",
+        "purged_count": purged_count,
+        "max_age_days": max_age_days,
+        "purged_by": current_user.username,
+    }
+
